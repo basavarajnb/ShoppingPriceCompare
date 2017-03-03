@@ -1,0 +1,203 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+
+<head>
+  <title>Getting Started Extension's Popup</title>
+  <style>
+    body {
+      font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+      font-size: 100%;
+      width: 500px;
+      max-height: 750px;
+    }
+    
+    input[type=button],
+    input[type=submit],
+    input[type=reset] {
+      background-color: #35586C;
+      border: none;
+      color: white;
+      padding: 16px 32px;
+      text-decoration: none;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+    
+    input[type=text]:focus {
+      border: 1px solid #555;
+    }
+    
+    #container {
+      width: 100%;
+    }
+    
+    .errorText {
+      color: red;
+      display: block
+    }
+    
+    #noProductErrorWindow {
+      text-align: center;
+    }
+    
+    .align-center {
+      text-align: center;
+    }
+    /* Product Header */
+    
+    #productHeaderContainer {
+      background-color: #232f3e;
+      color: white;
+      line-height: 2em;
+    }
+    
+    .imageContainer {
+      min-height: 250px;
+      width: 35%;
+      padding: 10px;
+      display: inline-block;
+      vertical-align: top;
+    }
+    
+    .productNameContainer {
+      padding: 10px;
+      text-align: left;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .productNameText {
+      font-weight: 700;
+    }
+    
+    .productPriceText {
+      font-size: 1.2em;
+      font-weight: 600;
+    }
+    
+    #productRating {
+      font-weight: 700;
+      color: #ff9700;
+    }
+    
+    #productReviewCount {
+      font-weight: 700;
+    }
+    
+    #productContainer {
+      border: 1px solid #232f3e;
+    }
+    
+    #moreProductDetailsContainer {
+      width: 55%;
+      padding: 10px;
+      display: inline-block;
+      vertical-align: top;
+    }
+    
+    #moreProductDetails label {
+      margin-top: 15px;
+    }
+    
+    #moreProductDetails label {
+      display: block;
+    }
+    
+    #productImage {
+      max-width: 180px;
+      max-height: 350px;
+    }
+    
+    .productSpecificDetailContainer {
+      margin-top: 10px;
+      margin-bottom: 15px;
+      text-align: center;
+      vertical-align: middle;
+      line-height: 2em;
+      border: 1px solid #232f3e;
+    }
+    
+    .productSpecificHeader {
+      background-color: #232f3e;
+      color: white;
+    }
+  </style>
+
+  <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+     -->
+</head>
+
+<body>
+  <div id="container">
+    <div id="noProductErrorWindow">
+    </div>
+    <div id="formDiv">
+      <div class="align-center">
+        <h3>Smart Shopping - Price Compare</h3>
+      </div>
+      <form id="productForm">
+        <div id="productContainer">
+          <div id="productHeaderContainer">
+            <div class="productNameContainer">
+              <label class="productNameText" id="productName" name="productName"></label>
+            </div>
+          </div>
+
+          <div id="productDetailsContainer">
+            <div class="imageContainer">
+              <img id="productImage" src="" alt="Product Image" />
+            </div>
+            <div id="moreProductDetailsContainer">
+
+              <div class="productSpecificDetailContainer">
+                <div class="productSpecificHeader">
+                  <label for="productPrice">Product Price </label>
+                </div>
+                <div class="productSpecificDetail">
+                  <label class="productPriceText" id="productPrice" name="productPrice"></label>
+                </div>
+              </div>
+
+              <div class="productSpecificDetailContainer">
+                <div class="productSpecificHeader">
+                  <label for="productRating">Product Rating </label>
+                </div>
+                <div class="productSpecificDetail">
+                  <label id="productRating" name="productRating"></label>
+                </div>
+              </div>
+
+              <div class="productSpecificDetailContainer">
+                <div class="productSpecificHeader">
+                  <label for="productReviewCount">Product Review Count </label>
+                </div>
+                <div class="productSpecificDetail">
+                  <label id="productReviewCount" name="productReviewCount"><a id="productReviewUrl" target="_blank" href=""></a></label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <input type="submit" value="Submit" onsubmit="onUserSubmit" />
+      </form>
+      <div id="validationText"></div>
+      <div id="resultDiv"></div>
+    </div>
+
+  </div>
+
+  <script src="jquery.min.js"></script>
+  <script src="popup.js"></script>
+</body>
+
+</html>
