@@ -1,12 +1,3 @@
-document.addEventListener('DOMContentLoaded', function () {
-    if (getBodyTagString(document) === undefined) {
-        console.log("On Load Senidng sourceString --------->>   IS UNDEFINED");
-    }
-    else {
-        chrome.runtime.sendMessage({ sourceString: getBodyTagString(document) });
-    }
-});
-
 function getBodyTagString(document_root) {
     if (document_root && document_root.body) {
         return document_root.body.innerHTML;
@@ -24,3 +15,25 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
         sendResponse({ sourceString: getBodyTagString(document) });
     }
 });
+
+function onWindowLoad() {
+    if (getBodyTagString(document) === undefined) {
+        console.log("On Load Senidng sourceString --------->>   IS UNDEFINED");
+    }
+    else {
+        chrome.runtime.sendMessage({ sourceString: getBodyTagString(document) });
+    }
+
+}
+
+$( document ).ready(function() {
+    
+});
+
+window.onload = onWindowLoad;
+
+document.onreadystatechange = function () {
+    if (document.readyState === 'complete') {
+
+    }
+}
