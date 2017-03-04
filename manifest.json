@@ -23,7 +23,7 @@
     }
   ],
   "background": {
-    "scripts": ["jquery.min.js", "eventPageBackground.js"],
+    "scripts": ["jquery.min.js", "service/shoppingService.js", "sites/amazonShop.js", "sites/flipkartShop.js", "eventPageBackground.js"],
     "persistent": false
   },
   "permissions": [
