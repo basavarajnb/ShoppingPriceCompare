@@ -18,15 +18,15 @@ function amazonSource(data, tabId) {
     if (!amazonProductImageUrl) {
         amazonProductImageUrl = $(data).find("div.imgTagWrapper > img.a-dynamic-image").attr('src');
     }
-    let isMobile = false;
-    if ($(data).find("div#wayfinding-breadcrumbs_feature_div ul li:last-child").text()) {
-        if ($(data).find("div#wayfinding-breadcrumbs_feature_div ul li:last-child").text().indexOf("Smartphones") != -1) {
-            isMobile = true;
-        }
-    }
-    else {
-        console.log("Breadcrumbs ERROR");
-    }
+    let isMobile = true;
+    // if ($(data).find("div#wayfinding-breadcrumbs_feature_div ul li:last-child").text()) {
+    //     if ($(data).find("div#wayfinding-breadcrumbs_feature_div ul li:last-child").text().indexOf("Smartphones") != -1) {
+    //         isMobile = true;
+    //     }
+    // }
+    // else {
+    //     console.log("Breadcrumbs ERROR");
+    // }
 
 
     //Get Product ID
@@ -75,8 +75,8 @@ function amazonSource(data, tabId) {
 
 function afterAmazonNoRecordsFound(result) {
     if (productDetails.isMobile) {
-        console.log("GET ERROR : ADD NEW MOBILE");
-        addNewProduct(productDetails);
+        console.log("GET ERROR");
+        // addNewProduct(productDetails);
     }
     else {
         console.log("This is not Mobile");
@@ -130,10 +130,6 @@ function afterGettingAmazonMobileById(result) {
                 }
             }
         }
-    }
-    else {
-        console.log("AFTER GET : ADD NEW MOBILE");
-        addNewProduct(productDetails);
     }
 }
 

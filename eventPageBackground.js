@@ -15,36 +15,36 @@ var originUrls = ["http://www.amazon.in",
 //         getBodyTagSourceString(tab);
 //     });
 // });
-chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
-    console.log("ON LOAD  Message", sender.tab);
-    if (response && response.sourceString) {
-            afterGettingSource(response.sourceString, sender.tab);
-        }
-        else {
-            console.log("SendBodyTagString returned UNDEFINED");
-            disableExtension(sender.tab.id)
-        }
-});
 
-// chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-//     if (changeInfo.status == 'complete') {
-//         console.log("AFTER UPDATE COMPLETE");
-//         console.log("chrome.tabs.onUpdated    ---- SendBodyTagString   ---  Page Status : ", tab.status);
-//         getBodyTagSourceString(tab);
-//     }
-// });
-
-// function getBodyTagSourceString(tab) {
-//     chrome.tabs.sendMessage(tab.id, { action: "SendBodyTagString" }, function (response) {
-//         if (response && response.sourceString && tab.status === "complete") {
-//             afterGettingSource(response.sourceString, tab);
+// chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
+//     console.log("ON LOAD  Message", sender.tab);
+//     if (response && response.sourceString) {
+//             afterGettingSource(response.sourceString, sender.tab);
 //         }
 //         else {
 //             console.log("SendBodyTagString returned UNDEFINED");
-//             disableExtension(tab.id)
+//             disableExtension(sender.tab.id)
 //         }
-//     });
-// }
+// });
+
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+    if (changeInfo.status == 'complete') {
+        console.log("AFTER UPDATE COMPLETE ---- SendBodyTagString   ---  Page Status : ", tab.status);
+        getBodyTagSourceString(tab);
+    }
+});
+
+function getBodyTagSourceString(tab) {
+    chrome.tabs.sendMessage(tab.id, { action: "SendBodyTagString" }, function (response) {
+        if (response && response.sourceString && tab.status === "complete") {
+            afterGettingSource(response.sourceString, tab);
+        }
+        else {
+            console.log("SendBodyTagString returned UNDEFINED");
+            disableExtension(tab.id)
+        }
+    });
+}
 
 function afterGettingSource(data, tab) {
     let isShoppingSite = false;

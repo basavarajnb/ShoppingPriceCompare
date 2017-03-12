@@ -17,15 +17,15 @@ function flipkartSource(data, tabId) {
     let flipkartReviewUrl = "";
     let flipkartProductImageUrl = $(data).find("div._2SIJjY").eq(0).children('img').attr('src');
 
-    let isMobile = false;
-    if ($(data).find("div._1joEet div:eq(2)").text()) {
-        if ($(data).find("div._1joEet div:eq(2)").text().indexOf("Mobile") != -1) {
-            isMobile = true;
-        }
-    }
-    else {
-        console.log("Breadcrumbs ERROR");
-    }
+    let isMobile = true;
+    // if ($(data).find("div._1joEet div:eq(2)").text()) {
+    //     if ($(data).find("div._1joEet div:eq(2)").text().indexOf("Mobile") != -1) {
+    //         isMobile = true;
+    //     }
+    // }
+    // else {
+    //     console.log("Breadcrumbs ERROR");
+    // }
 
     price = Number(flipkartPriceFormatted.replace(/[^0-9\.]+/g, ""));
 
@@ -71,8 +71,7 @@ function setFlipkartValues(productDetails, tabId) {
 
 function afterFlipkartNoRecordsFound(result) {
     if (productDetails.isMobile) {
-        console.log("GET ERROR : ADD NEW MOBILE");
-        addNewProduct(productDetails);
+        console.log("GET ERROR");
     }
     else {
         console.log("This is not Mobile");
@@ -126,9 +125,5 @@ function afterGettingFlipkartMobileById(result) {
                 }
             }
         }
-    }
-    else {
-        console.log("AFTER GET : ADD NEW MOBILE");
-        addNewProduct(productDetails);
     }
 }

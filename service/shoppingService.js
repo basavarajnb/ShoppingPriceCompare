@@ -1,6 +1,20 @@
+var serviceHostAddress = "http://pricecompare/";
+
+var getProductDetailsByIdOnSuccess = (resultArray, productDetails, successCallback) => {
+    if (resultArray) {
+        if (resultArray[0] && resultArray.length === 1) {
+            let result = resultArray[0];
+            successCallback(result);
+        }
+        else if (resultArray.length === 0) {
+            addNewProduct(productDetails);
+        }
+    }
+}
+
 function getProductDetailsById(productDetails, successCallback, errorCallback) {
     $.ajax({
-        url: "http://saileshwedseshwari.in/php/get-mobile-by-id.php",
+        url: serviceHostAddress + "get-mobile-by-id.php",
         type: "GET",
         data: {
             id: productDetails.id,
@@ -9,7 +23,7 @@ function getProductDetailsById(productDetails, successCallback, errorCallback) {
         dataType: "JSON",
         success: function (data) {
             console.log("DTA FROM GET : ", data);
-            successCallback(data);
+            getProductDetailsByIdOnSuccess(data, productDetails, successCallback);
         },
         error: function (textStatus, errorThrown) {
             errorCallback("")
@@ -19,7 +33,7 @@ function getProductDetailsById(productDetails, successCallback, errorCallback) {
 
 function updateProductInfo(data) {
     $.ajax({
-        url: "http://saileshwedseshwari.in/php/update-mobile.php",
+        url: serviceHostAddress + "update-mobile.php",
         type: "POST",
         data: data,
         dataType: "JSON",
@@ -34,7 +48,7 @@ function updateProductInfo(data) {
 
 function addNewProduct(productDetails) {
     $.ajax({
-        url: "http://saileshwedseshwari.in/php/add-mobile.php",
+        url: serviceHostAddress + "add-mobile.php",
         type: "POST",
         data: productDetails,
         dataType: "JSON",

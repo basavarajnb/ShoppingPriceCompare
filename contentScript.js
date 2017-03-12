@@ -25,11 +25,6 @@ function onWindowLoad() {
     }
 
 }
-
-$( document ).ready(function() {
-    
-});
-
 window.onload = onWindowLoad;
 
 document.onreadystatechange = function () {
