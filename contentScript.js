@@ -16,19 +16,13 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
     }
 });
 
-function onWindowLoad() {
-    if (getBodyTagString(document) === undefined) {
-        console.log("On Load Senidng sourceString --------->>   IS UNDEFINED");
-    }
-    else {
-        chrome.runtime.sendMessage({ sourceString: getBodyTagString(document) });
-    }
+// function onWindowLoad() {
+//     if (getBodyTagString(document) === undefined) {
+//         console.log("On Load Senidng sourceString --------->>   IS UNDEFINED");
+//     }
+//     else {
+//         chrome.runtime.sendMessage({ sourceString: getBodyTagString(document) });
+//     }
 
-}
-window.onload = onWindowLoad;
-
-document.onreadystatechange = function () {
-    if (document.readyState === 'complete') {
-
-    }
-}
+// }
+// window.onload = onWindowLoad;
