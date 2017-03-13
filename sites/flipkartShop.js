@@ -1,4 +1,4 @@
-function flipkartSource(data, tabId) {
+function flipkartSource(data, tabId, setFlipkartValuesCallback, unsetFlipkartValuesCallback) {
     let price = 0;
     productDetails.id = getParameterByName("pid", productDetails.url);
 
@@ -40,31 +40,28 @@ function flipkartSource(data, tabId) {
         productDetails.reviewUrl = flipkartReviewUrl;
         productDetails.imageUrl = flipkartProductImageUrl;
         productDetails.isMobile = isMobile;
-        setFlipkartValues(productDetails, tabId);
+        if (productDetails.url.indexOf("?") !== -1) {
+            productDetails.url = productDetails.url.substr(0, productDetails.url.indexOf("?"));
+            productDetails.url = productDetails.url + "?pid=" + productDetails.id
+        }
+        if (productDetails.reviewUrl) {
+            productDetails.reviewUrl = productDetails.domain + productDetails.reviewUrl;
+        }
+        else {
+            productDetails.reviewUrl = productDetails.url
+        }
+        setFlipkartValuesCallback(productDetails, tabId);
     }
     else {
-        disableExtension(tabId);
+        unsetFlipkartValuesCallback(tabId);
     }
 }
 
 function setFlipkartValues(productDetails, tabId) {
-    if (productDetails.url.indexOf("?") !== -1) {
-            productDetails.url = productDetails.url.substr(0, productDetails.url.indexOf("?"));
-            productDetails.url = productDetails.url + "?pid=" + productDetails.id
-        }
-    if (productDetails.reviewUrl) {
-        productDetails.reviewUrl = productDetails.domain + productDetails.reviewUrl;
-    }
-    else {
-        productDetails.reviewUrl = productDetails.url
-    }
 
-    chrome.browserAction.setIcon({
-        path: "icon16.png",
-        tabId: tabId
-    });
-    chrome.browserAction.setBadgeText({ text: "1", tabId: tabId });
-    badgeTextData[tabId] = { badgeText: "1" };
+    console.log("Product Details => ", productDetails);
+
+    setTabDetails(tabId);
 
     getProductDetailsById(productDetails, afterGettingFlipkartMobileById, afterFlipkartNoRecordsFound);
 }

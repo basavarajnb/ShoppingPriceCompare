@@ -63,11 +63,11 @@ function afterGettingSource(data, tab) {
         data = $.parseHTML(data);
         if (originUrl.indexOf("amazon") !== -1) {
             productDetails.siteName = "Amazon";
-            amazonSource(data, tab.id);
+            amazonSource(data, tab.id, setAmazonValues, disableExtension);
         }
         else if (originUrl.indexOf("flipkart") !== -1) {
             productDetails.siteName = "Flipkart";
-            flipkartSource(data, tab.id);
+            flipkartSource(data, tab.id, setFlipkartValues, disableExtension);
             console.log("FLIPKART SITE");
         }
     } else {
@@ -99,4 +99,13 @@ function getParameterByName(name, url) {
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function setTabDetails(tabId) {
+    chrome.browserAction.setIcon({
+        path: "icon16.png",
+        tabId: tabId
+    });
+    chrome.browserAction.setBadgeText({ text: "1", tabId: tabId });
+    badgeTextData[tabId] = { badgeText: "1" };
 }

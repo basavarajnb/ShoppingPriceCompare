@@ -1,4 +1,4 @@
-function amazonSource(data, tabId) {
+function amazonSource(data, tabId, setAmazonValuesCallback, unsetAmazonValuesCallback) {
     let price = 0;
     let amazonFormatterPrice = "";
     let productName = $(data).find("#productTitle").text().trim();
@@ -65,13 +65,28 @@ function amazonSource(data, tabId) {
         productDetails.imageUrl = amazonProductImageUrl;
         productDetails.reviewUrl = amazonReviewUrl;
         productDetails.isMobile = isMobile;
-        setAmazonValues(productDetails, tabId);
+        productDetails.url = productDetails.domain + "/gp/product/" + productDetails.id;
+        if (productDetails.reviewUrl) {
+            productDetails.reviewUrl = productDetails.domain + productDetails.reviewUrl;
+        }
+        else {
+            productDetails.reviewUrl = productDetails.url
+        }
+        setAmazonValuesCallback(productDetails, tabId);
     }
     else {
-        disableExtension(tabId);
+        unsetAmazonValuesCallback(tabId);
     }
 }
 
+function setAmazonValues(productDetails, tabId) {
+
+    console.log("Product Details => ", productDetails);
+
+    setTabDetails(tabId);
+
+    getProductDetailsById(productDetails, afterGettingAmazonMobileById, afterAmazonNoRecordsFound);
+}
 
 function afterAmazonNoRecordsFound(result) {
     if (productDetails.isMobile) {
@@ -131,23 +146,4 @@ function afterGettingAmazonMobileById(result) {
             }
         }
     }
-}
-
-function setAmazonValues(productDetails, tabId) {
-    productDetails.url = productDetails.domain + "/gp/product/" + productDetails.id;
-    if (productDetails.reviewUrl) {
-        productDetails.reviewUrl = productDetails.domain + productDetails.reviewUrl;
-    }
-    else {
-        productDetails.reviewUrl = productDetails.url
-    }
-
-    chrome.browserAction.setIcon({
-        path: "icon16.png",
-        tabId: tabId
-    });
-    chrome.browserAction.setBadgeText({ text: "1", tabId: tabId });
-    badgeTextData[tabId] = { badgeText: "1" };
-
-    getProductDetailsById(productDetails, afterGettingAmazonMobileById, afterAmazonNoRecordsFound);
 }
