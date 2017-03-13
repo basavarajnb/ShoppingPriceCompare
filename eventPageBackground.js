@@ -75,14 +75,18 @@ function afterGettingSource(data, tab) {
     }
 }
 
-function onValuesUpdate(productDetails, tabId) {
-    var root = 'http://saileshwedseshwari.in/php/sendmail.php';
-    $.ajax({
-        url: root, success: function (data) {
-            console.log("Product : " + productDetails.productName + "     Price: " + productDetails.price + "              Save : " + data);
+
+function afterGettingMobileById(result, isUpdated) {
+    if (result) {
+        if (isUpdated) {
+            console.log("Mobile Info is updated");
         }
-    });
+        else {
+            console.log("Mobile Info is latest");
+        }
+    }
 }
+
 function disableExtension(tabId) {
     chrome.browserAction.setBadgeText({ text: "", tabId: tabId });
     chrome.browserAction.setIcon({

@@ -63,7 +63,7 @@ function setFlipkartValues(productDetails, tabId) {
 
     setTabDetails(tabId);
 
-    getProductDetailsById(productDetails, afterGettingFlipkartMobileById, afterFlipkartNoRecordsFound);
+    getProductDetailsById(productDetails, afterGettingMobileById, afterFlipkartNoRecordsFound);
 }
 
 function afterFlipkartNoRecordsFound(result) {
@@ -72,55 +72,5 @@ function afterFlipkartNoRecordsFound(result) {
     }
     else {
         console.log("This is not Mobile");
-    }
-}
-
-function afterGettingFlipkartMobileById(result) {
-    if (result) {
-        if (productDetails.siteName === "Flipkart") {
-            if (result.flipkartMobileId === productDetails.id) {
-                let data = {};
-                data.siteName = "Flipkart";
-                data.id = productDetails.id;
-                let callApi = false;
-                if (productDetails.price && result.flipkartMobilePrice != productDetails.price) {
-                    data.price = productDetails.price;
-                    callApi = true;
-                }
-                if (productDetails.name && result.flipkartMobileName != productDetails.name) {
-                    data.name = productDetails.name;
-                    callApi = true;
-                }
-                if (productDetails.rating && result.flipkartMobileRating != productDetails.rating) {
-                    data.rating = productDetails.rating;
-                    callApi = true;
-                }
-                if (productDetails.reviewCount && result.flipkartMobileReviewCount != productDetails.reviewCount) {
-                    data.reviewCount = productDetails.reviewCount;
-                    callApi = true;
-                }
-                if (productDetails.url && result.flipkartMobileUrl != productDetails.url) {
-                    data.url = productDetails.url;
-                    callApi = true;
-                }
-                if (productDetails.reviewUrl && result.flipkartMobileReviewUrl != productDetails.reviewUrl) {
-                    data.reviewUrl = productDetails.reviewUrl;
-                    callApi = true;
-                }
-                if (productDetails.imageUrl && result.flipkartMobileImageUrl != productDetails.imageUrl) {
-                    data.imageUrl = productDetails.imageUrl;
-                    callApi = true;
-                }
-                if (callApi == true && productDetails.isMobile) {
-                    updateProductInfo(data);
-                }
-                else if (!productDetails.isMobile) {
-                    console.log("This is not Mobile");
-                }
-                else {
-                    console.log("No Updates");
-                }
-            }
-        }
     }
 }

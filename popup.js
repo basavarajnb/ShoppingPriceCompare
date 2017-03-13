@@ -138,50 +138,50 @@ function afterGettingMobileById(result) {
   if (result) {
     if (productDetails.siteName === "Amazon") {
 
-      $("#resultDiv").append("<span class='errorText'> productDetails.id = " + result.amazonMobileId + "</span>");
-      $("#resultDiv").append("<span class='errorText'> productDetails.name = " + result.amazonMobileName + "</span>");
-      $("#resultDiv").append("<span class='errorText'> productDetails.price = " + result.amazonMobilePrice + "</span>");
+      $("#resultDiv").append("<span class='errorText'> productDetails.id = " + result.mobileId + "</span>");
+      $("#resultDiv").append("<span class='errorText'> productDetails.name = " + result.mobileName + "</span>");
+      $("#resultDiv").append("<span class='errorText'> productDetails.price = " + result.mobilePrice + "</span>");
     }
     else if (productDetails.siteName === "Flipkart") {
-      $("#resultDiv").append("<span class='errorText'> productDetails.id = " + result.flipkartMobileId + "</span>");
-      $("#resultDiv").append("<span class='errorText'> productDetails.name = " + result.flipkartMobileName + "</span>");
-      $("#resultDiv").append("<span class='errorText'> productDetails.price = " + result.flipkartMobilePrice + "</span>");
+      $("#resultDiv").append("<span class='errorText'> productDetails.id = " + result.mobileId + "</span>");
+      $("#resultDiv").append("<span class='errorText'> productDetails.name = " + result.mobileName + "</span>");
+      $("#resultDiv").append("<span class='errorText'> productDetails.price = " + result.mobilePrice + "</span>");
     }
 
 
     // Update Values if there are any
 
     if (productDetails.siteName === "Amazon") {
-      if (result.amazonMobileId === productDetails.id) {
+      if (result.mobileId === productDetails.id) {
         let data = {};
         data.siteName = "Amazon";
         data.id = productDetails.id;
         let callApi = false;
-        if (productDetails.price && result.amazonMobilePrice != productDetails.price) {
+        if (productDetails.price && result.mobilePrice != productDetails.price) {
           data.price = productDetails.price;
           callApi = true;
         }
-        if (productDetails.name && result.amazonMobileName != productDetails.name) {
+        if (productDetails.name && result.mobileName != productDetails.name) {
           data.name = productDetails.name;
           callApi = true;
         }
-        if (productDetails.rating && result.amazonMobileRating != productDetails.rating) {
+        if (productDetails.rating && result.mobileRating != productDetails.rating) {
           data.rating = productDetails.rating;
           callApi = true;
         }
-        if (productDetails.reviewCount && result.amazonMobileReviewCount != productDetails.reviewCount) {
+        if (productDetails.reviewCount && result.mobileReviewCount != productDetails.reviewCount) {
           data.reviewCount = productDetails.reviewCount;
           callApi = true;
         }
-        if (productDetails.url && result.amazonMobileUrl != productDetails.url) {
+        if (productDetails.url && result.mobileUrl != productDetails.url) {
           data.url = productDetails.url;
           callApi = true;
         }
-        if (productDetails.reviewUrl && result.amazonMobileReviewUrl != productDetails.reviewUrl) {
+        if (productDetails.reviewUrl && result.mobileReviewUrl != productDetails.reviewUrl) {
           data.reviewUrl = productDetails.reviewUrl;
           callApi = true;
         }
-        if (productDetails.imageUrl && result.amazonMobileImageUrl != productDetails.imageUrl) {
+        if (productDetails.imageUrl && result.mobileImageUrl != productDetails.imageUrl) {
           data.imageUrl = productDetails.imageUrl;
           callApi = true;
         }
@@ -197,36 +197,36 @@ function afterGettingMobileById(result) {
       }
     }
     else if (productDetails.siteName === "Flipkart") {
-      if (result.flipkartMobileId === productDetails.id) {
+      if (result.mobileId === productDetails.id) {
         let data = {};
         data.siteName = "Flipkart";
         data.id = productDetails.id;
         let callApi = false;
-        if (productDetails.price && result.flipkartMobilePrice != productDetails.price) {
+        if (productDetails.price && result.mobilePrice != productDetails.price) {
           data.price = productDetails.price;
           callApi = true;
         }
-        if (productDetails.name && result.flipkartMobileName != productDetails.name) {
+        if (productDetails.name && result.mobileName != productDetails.name) {
           data.name = productDetails.name;
           callApi = true;
         }
-        if (productDetails.rating && result.flipkartMobileRating != productDetails.rating) {
+        if (productDetails.rating && result.mobileRating != productDetails.rating) {
           data.rating = productDetails.rating;
           callApi = true;
         }
-        if (productDetails.reviewCount && result.flipkartMobileReviewCount != productDetails.reviewCount) {
+        if (productDetails.reviewCount && result.mobileReviewCount != productDetails.reviewCount) {
           data.reviewCount = productDetails.reviewCount;
           callApi = true;
         }
-        if (productDetails.url && result.flipkartMobileUrl != productDetails.url) {
+        if (productDetails.url && result.mobileUrl != productDetails.url) {
           data.url = productDetails.url;
           callApi = true;
         }
-        if (productDetails.reviewUrl && result.flipkartMobileReviewUrl != productDetails.reviewUrl) {
+        if (productDetails.reviewUrl && result.mobileReviewUrl != productDetails.reviewUrl) {
           data.reviewUrl = productDetails.reviewUrl;
           callApi = true;
         }
-        if (productDetails.imageUrl && result.flipkartMobileImageUrl != productDetails.imageUrl) {
+        if (productDetails.imageUrl && result.mobileImageUrl != productDetails.imageUrl) {
           data.imageUrl = productDetails.imageUrl;
           callApi = true;
         }

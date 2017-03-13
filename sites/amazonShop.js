@@ -85,7 +85,7 @@ function setAmazonValues(productDetails, tabId) {
 
     setTabDetails(tabId);
 
-    getProductDetailsById(productDetails, afterGettingAmazonMobileById, afterAmazonNoRecordsFound);
+    getProductDetailsById(productDetails, afterGettingMobileById, afterAmazonNoRecordsFound);
 }
 
 function afterAmazonNoRecordsFound(result) {
@@ -98,52 +98,3 @@ function afterAmazonNoRecordsFound(result) {
     }
 }
 
-function afterGettingAmazonMobileById(result) {
-    if (result) {
-        if (productDetails.siteName === "Amazon") {
-            if (result.amazonMobileId === productDetails.id) {
-                let data = {};
-                data.siteName = "Amazon";
-                data.id = productDetails.id;
-                let callApi = false;
-                if (productDetails.price && result.amazonMobilePrice != productDetails.price) {
-                    data.price = productDetails.price;
-                    callApi = true;
-                }
-                if (productDetails.name && result.amazonMobileName != productDetails.name) {
-                    data.name = productDetails.name;
-                    callApi = true;
-                }
-                if (productDetails.rating && result.amazonMobileRating != productDetails.rating) {
-                    data.rating = productDetails.rating;
-                    callApi = true;
-                }
-                if (productDetails.reviewCount && result.amazonMobileReviewCount != productDetails.reviewCount) {
-                    data.reviewCount = productDetails.reviewCount;
-                    callApi = true;
-                }
-                if (productDetails.url && result.amazonMobileUrl != productDetails.url) {
-                    data.url = productDetails.url;
-                    callApi = true;
-                }
-                if (productDetails.reviewUrl && result.amazonMobileReviewUrl != productDetails.reviewUrl) {
-                    data.reviewUrl = productDetails.reviewUrl;
-                    callApi = true;
-                }
-                if (productDetails.imageUrl && result.amazonMobileImageUrl != productDetails.imageUrl) {
-                    data.imageUrl = productDetails.imageUrl;
-                    callApi = true;
-                }
-                if (callApi == true && productDetails.isMobile) {
-                    updateProductInfo(data);
-                }
-                else if (!productDetails.isMobile) {
-                    console.log("This is not Mobile");
-                }
-                else {
-                    console.log("No Updates");
-                }
-            }
-        }
-    }
-}
