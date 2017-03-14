@@ -1,81 +1,103 @@
-function amazonSource(data, tabId, setAmazonValuesCallback, unsetAmazonValuesCallback) {
+function amazonSource(data, tabId, setAmazonValuesCallback, disableExtension) {
     let price = 0;
-    let amazonFormatterPrice = "";
-    let productName = $(data).find("#productTitle").text().trim();
-    let amazonSalePriceS = $(data).find("#priceblock_saleprice").text().trim();
-    let amazonPriceS = $(data).find("#priceblock_ourprice").text().trim();
-    let amazonDealPriceS = $(data).find("#priceblock_dealprice").text().trim();
+    let productFormatterPrice = "";
 
-    let amazonRating = $(data).find("span#acrPopover").attr('title');
-    if (amazonRating) {
-        amazonRating = amazonRating.substr(0, amazonRating.indexOf('o'));
-        amazonRating = amazonRating.replace(/[^0-9\.]+/g, "");
-    }
+    let productName;
+    let productRating;
+    let productReviewCount;
+    let productReviewUrl;
+    let productImageUrl;
 
-    let amazonReviewCount = $(data).find("span#acrCustomerReviewText").text().trim();
-    let amazonReviewUrl = $(data).find("a#acrCustomerReviewLink").attr('href');
-    let amazonProductImageUrl = $(data).find("div#imgTagWrapperId").children('img').attr('src');
-    if (!amazonProductImageUrl) {
-        amazonProductImageUrl = $(data).find("div.imgTagWrapper > img.a-dynamic-image").attr('src');
-    }
-    let isMobile = true;
-    // if ($(data).find("div#wayfinding-breadcrumbs_feature_div ul li:last-child").text()) {
-    //     if ($(data).find("div#wayfinding-breadcrumbs_feature_div ul li:last-child").text().indexOf("Smartphones") != -1) {
-    //         isMobile = true;
-    //     }
-    // }
-    // else {
-    //     console.log("Breadcrumbs ERROR");
-    // }
+    let productSalePriceS;
+    let productPriceS;
+    let productDealPriceS;
+
+    let isMobile;
+
+    try {
+        productName = $(data).find("#productTitle").text().trim();
+        productSalePriceS = $(data).find("#priceblock_saleprice").text().trim();
+        productPriceS = $(data).find("#priceblock_ourprice").text().trim();
+        productDealPriceS = $(data).find("#priceblock_dealprice").text().trim();
+
+        productRating = $(data).find("span#acrPopover").attr('title');
+        if (productRating) {
+            productRating = productRating.substr(0, productRating.indexOf('o'));
+            productRating = productRating.replace(/[^0-9\.]+/g, "");
+        }
+
+        productReviewCount = $(data).find("span#acrCustomerReviewText").text().trim();
+        productReviewUrl = $(data).find("a#acrCustomerReviewLink").attr('href');
+        productImageUrl = $(data).find("div#imgTagWrapperId").children('img').attr('src');
+        if (!productImageUrl) {
+            productImageUrl = $(data).find("div.imgTagWrapper > img.a-dynamic-image").attr('src');
+        }
+        isMobile = true;
 
 
-    //Get Product ID
-    // str.substr(0, str.indexOf(' ')); // "72"
-    // str.substr(str.indexOf(' ') + 1);
-    // /Moto-Plus-4th-Gen-Black/product-reviews/B01DDP7GZK/ref=dpx_acr_txt?showViewpoints=1
-    let array1 = amazonReviewUrl.split('/');
-    let productId = array1[3];
-    // $('img[src="' + oldSrc + '"]').attr('src', newSrc);
 
-    let amazonPrice = Number(amazonPriceS.replace(/[^0-9\.]+/g, ""));
-    let amazonSalePrice = Number(amazonSalePriceS.replace(/[^0-9\.]+/g, ""));
-    let amazonDealPrice = Number(amazonDealPriceS.replace(/[^0-9\.]+/g, ""));
-    amazonReviewCount = "" + Number(amazonReviewCount.replace(/[^0-9\.]+/g, ""));
+        // if ($(data).find("div#wayfinding-breadcrumbs_feature_div ul li:last-child").text()) {
+        //     if ($(data).find("div#wayfinding-breadcrumbs_feature_div ul li:last-child").text().indexOf("Smartphones") != -1) {
+        //         isMobile = true;
+        //     }
+        // }
+        // else {
+        //     console.log("Breadcrumbs ERROR");
+        // }
 
-    let prices = [];
 
-    if (amazonSalePrice) { prices.push(amazonSalePrice); }
-    if (amazonPrice) { prices.push(amazonPrice); }
-    if (amazonDealPrice) { prices.push(amazonDealPrice); }
+        //Get Product ID
+        // str.substr(0, str.indexOf(' ')); // "72"
+        // str.substr(str.indexOf(' ') + 1);
+        // /Moto-Plus-4th-Gen-Black/product-reviews/B01DDP7GZK/ref=dpx_acr_txt?showViewpoints=1
+        let array1 = productReviewUrl.split('/');
+        let productId = array1[3];
+        // $('img[src="' + oldSrc + '"]').attr('src', newSrc);
 
-    price = Math.min.apply(Math, prices);
-    if (price === amazonPrice) { amazonFormatterPrice = amazonPriceS; }
-    else if (price === amazonSalePrice) { amazonFormatterPrice = amazonSalePriceS; }
-    else if (price === amazonDealPrice) { amazonFormatterPrice = amazonDealPriceS; }
-    if (price == Infinity) {
-        price = 0;
-    }
-    if (productName && price) {
-        productDetails.id = productId;
-        productDetails.name = productName;
-        productDetails.formattedPrice = '\u20B9 ' + amazonFormatterPrice;
-        productDetails.price = price;
-        productDetails.rating = amazonRating;
-        productDetails.reviewCount = amazonReviewCount;
-        productDetails.imageUrl = amazonProductImageUrl;
-        productDetails.reviewUrl = amazonReviewUrl;
-        productDetails.isMobile = isMobile;
-        productDetails.url = productDetails.domain + "/gp/product/" + productDetails.id;
-        if (productDetails.reviewUrl) {
-            productDetails.reviewUrl = productDetails.domain + productDetails.reviewUrl;
+        let productPrice = Number(productPriceS.replace(/[^0-9\.]+/g, ""));
+        let productSalePrice = Number(productSalePriceS.replace(/[^0-9\.]+/g, ""));
+        let productDealPrice = Number(productDealPriceS.replace(/[^0-9\.]+/g, ""));
+        productReviewCount = "" + Number(productReviewCount.replace(/[^0-9\.]+/g, ""));
+
+        let prices = [];
+
+        if (productSalePrice) { prices.push(productSalePrice); }
+        if (productPrice) { prices.push(productPrice); }
+        if (productDealPrice) { prices.push(productDealPrice); }
+
+        price = Math.min.apply(Math, prices);
+        if (price === productPrice) { productFormatterPrice = productPriceS; }
+        else if (price === productSalePrice) { productFormatterPrice = productSalePriceS; }
+        else if (price === productDealPrice) { productFormatterPrice = productDealPriceS; }
+        if (price == Infinity) {
+            price = 0;
+        }
+        if (productName && price) {
+            productDetails.id = productId;
+            productDetails.name = productName;
+            productDetails.formattedPrice = '\u20B9 ' + productFormatterPrice;
+            productDetails.price = price;
+            productDetails.rating = productRating;
+            productDetails.reviewCount = productReviewCount;
+            productDetails.imageUrl = productImageUrl;
+            productDetails.reviewUrl = productReviewUrl;
+            productDetails.isMobile = isMobile;
+            productDetails.url = productDetails.domain + "/gp/product/" + productDetails.id;
+            if (productDetails.reviewUrl) {
+                productDetails.reviewUrl = productDetails.domain + productDetails.reviewUrl;
+            }
+            else {
+                productDetails.reviewUrl = productDetails.url
+            }
+            setAmazonValuesCallback(productDetails, tabId);
         }
         else {
-            productDetails.reviewUrl = productDetails.url
+            disableExtension(tabId);
         }
-        setAmazonValuesCallback(productDetails, tabId);
     }
-    else {
-        unsetAmazonValuesCallback(tabId);
+    catch (err) {
+        console.log("ERROR WHILE PARSING PAGE ", err);
+        disableExtension(tabId);
     }
 }
 

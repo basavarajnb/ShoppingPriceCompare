@@ -1,23 +1,68 @@
-function flipkartSource(data, tabId, setFlipkartValuesCallback, unsetFlipkartValuesCallback) {
+function flipkartSource(data, tabId, setFlipkartValuesCallback, disableExtension) {
     let price = 0;
-    productDetails.id = getParameterByName("pid", productDetails.url);
+    let productFormatterPrice = "";
 
+    let productName;
+    let productRating;
+    let productReviewCount;
+    let productReviewUrl;
+    let productImageUrl;
 
-    let productName = $(data).find("._3eAQiD").text().trim();
-    let flipkartPriceFormatted = $(data).find("._1vC4OE._37U4_g").text().trim();
+    let isMobile;
 
-    let flipkartRating = $(data).find("span#productRating_" + productDetails.id).eq(0).children("div").children("span").text();
-    if (flipkartRating) {
-        flipkartRating = flipkartRating.replace(/[^0-9\.]+/g, "");
-        if (flipkartRating.length > 3) {
-            flipkartRating.length.substr(0, 3)
+    try {
+        productDetails.id = getParameterByName("pid", productDetails.url);
+        productName = $(data).find("._3eAQiD").text().trim();
+        productFormatterPrice = $(data).find("._1vC4OE._37U4_g").text().trim();
+
+        productRating = $(data).find("span#productRating_" + productDetails.id).eq(0).children("div").children("span").text();
+        if (productRating) {
+            productRating = productRating.replace(/[^0-9\.]+/g, "");
+            if (productRating.length > 3) {
+                productRating.length.substr(0, 3)
+            }
+        }
+        productReviewCount = $(data).find("span._38sUEc").eq(0).children('span').text();
+        productReviewUrl = "";
+        productImageUrl = $(data).find("div._2SIJjY").eq(0).children('img').attr('src');
+
+        isMobile = true;
+
+        price = Number(productFormatterPrice.replace(/[^0-9\.]+/g, ""));
+
+        console.log("flipkartPrice  " + productFormatterPrice);
+        console.log("price  " + price);
+        if (productName && price) {
+            productDetails.name = productName;
+            productDetails.formattedPrice = productFormatterPrice;
+            productDetails.price = price;
+            productDetails.rating = productRating;
+            productDetails.reviewCount = productReviewCount;
+            productDetails.reviewUrl = productReviewUrl;
+            productDetails.imageUrl = productImageUrl;
+            productDetails.isMobile = isMobile;
+            if (productDetails.url.indexOf("?") !== -1) {
+                productDetails.url = productDetails.url.substr(0, productDetails.url.indexOf("?"));
+                productDetails.url = productDetails.url + "?pid=" + productDetails.id
+            }
+            if (productDetails.reviewUrl) {
+                productDetails.reviewUrl = productDetails.domain + productDetails.reviewUrl;
+            }
+            else {
+                productDetails.reviewUrl = productDetails.url
+            }
+            setFlipkartValuesCallback(productDetails, tabId);
+        }
+        else {
+            disableExtension(tabId);
         }
     }
-    let flipkartReviewCount = $(data).find("span._38sUEc").eq(0).children('span').text();
-    let flipkartReviewUrl = "";
-    let flipkartProductImageUrl = $(data).find("div._2SIJjY").eq(0).children('img').attr('src');
+    catch (err) {
+        console.log("ERROR WHILE PARSING PAGE ", err);
+        disableExtension(tabId);
+    }
 
-    let isMobile = true;
+
     // if ($(data).find("div._1joEet div:eq(2)").text()) {
     //     if ($(data).find("div._1joEet div:eq(2)").text().indexOf("Mobile") != -1) {
     //         isMobile = true;
@@ -26,35 +71,6 @@ function flipkartSource(data, tabId, setFlipkartValuesCallback, unsetFlipkartVal
     // else {
     //     console.log("Breadcrumbs ERROR");
     // }
-
-    price = Number(flipkartPriceFormatted.replace(/[^0-9\.]+/g, ""));
-
-    console.log("flipkartPrice  " + flipkartPriceFormatted);
-    console.log("price  " + price);
-    if (productName && price) {
-        productDetails.name = productName;
-        productDetails.formattedPrice = flipkartPriceFormatted;
-        productDetails.price = price;
-        productDetails.rating = flipkartRating;
-        productDetails.reviewCount = flipkartReviewCount;
-        productDetails.reviewUrl = flipkartReviewUrl;
-        productDetails.imageUrl = flipkartProductImageUrl;
-        productDetails.isMobile = isMobile;
-        if (productDetails.url.indexOf("?") !== -1) {
-            productDetails.url = productDetails.url.substr(0, productDetails.url.indexOf("?"));
-            productDetails.url = productDetails.url + "?pid=" + productDetails.id
-        }
-        if (productDetails.reviewUrl) {
-            productDetails.reviewUrl = productDetails.domain + productDetails.reviewUrl;
-        }
-        else {
-            productDetails.reviewUrl = productDetails.url
-        }
-        setFlipkartValuesCallback(productDetails, tabId);
-    }
-    else {
-        unsetFlipkartValuesCallback(tabId);
-    }
 }
 
 function setFlipkartValues(productDetails, tabId) {

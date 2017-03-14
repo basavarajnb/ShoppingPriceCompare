@@ -115,7 +115,7 @@
     
     .productSpecificDetailContainer {
       margin-top: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 5px;
       text-align: center;
       vertical-align: middle;
       line-height: 2em;
@@ -125,6 +125,31 @@
     .productSpecificHeader {
       background-color: #232f3e;
       color: white;
+    }
+    
+    .tableContainer {
+      text-align: center;
+    }
+    
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    th {
+      background-color: #232f3e;
+      color: white;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    td {
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f2f2f2
     }
   </style>
 
@@ -182,6 +207,18 @@
                 </div>
                 <div class="productSpecificDetail">
                   <label id="productReviewCount" name="productReviewCount"><a id="productReviewUrl" target="_blank" href=""></a></label>
+                </div>
+              </div>
+
+              <div class="productPriceHistoryContainer">
+                <div class="tableContainer">
+                  <label for="productRating">Price History Table</label>
+                  <table id="priceHistoryTable">
+                    <tr>
+                      <th>Price</th>
+                      <th>Date</th>
+                    </tr>
+                  </table>
                 </div>
               </div>
             </div>

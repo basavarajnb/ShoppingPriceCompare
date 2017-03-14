@@ -10,41 +10,10 @@ var originUrls = ["http://www.amazon.in",
   "https://www.flipkart.com"
 ];
 
-$('#productForm').submit(function (ev) {
-  ev.preventDefault(); // to stop the form from submitting
-  /* Validations go here */
-  let flag = true;
+$("#validationText").empty();
+$("#resultDiv").empty();
 
-  $("#validationText").empty();
-  $("#resultDiv").empty();
-  var pn = $('#productName').val();
-  if (!$.trim(pn)) {
-    $("#validationText").append("<span class='errorText'>Product Name is required!</span>");
-    flag = false;
-  }
-  var pn = $('#productPrice').val();
-  if (!$.trim(pn)) {
-    $("#validationText").append("<span class='errorText'>Product Price is required!</span>");
-    flag = false;
-  }
-  if (flag === false) {
-    return false;
-  }
-  else {
-    callAPI();
-  }
-});
-callAPI = () => {
-
-  var root = 'http://saileshwedseshwari.in/php/sendmail.php';
-
-  $.ajax({
-    url: root, success: function (data) {
-      $("#resultDiv").append("<span class='errorText'>results = " + data + "</span>");
-      onCallSucess();
-    }
-  });
-}
+// $("#resultDiv").append("<span class='errorText'>results = " + data + "</span>");
 
 // Save something against that tab's data
 function saveData(tab, data) {
@@ -136,112 +105,27 @@ function afterNoRecordsFound(result) {
 
 function afterGettingMobileById(result) {
   if (result) {
-    if (productDetails.siteName === "Amazon") {
+    $("#resultDiv").append("<span class='errorText'> productDetails.id = " + result.mobileId + "</span>");
+    $("#resultDiv").append("<span class='errorText'> productDetails.name = " + result.mobileName + "</span>");
+    $("#resultDiv").append("<span class='errorText'> productDetails.price = " + result.mobilePrice + "</span>");
 
-      $("#resultDiv").append("<span class='errorText'> productDetails.id = " + result.mobileId + "</span>");
-      $("#resultDiv").append("<span class='errorText'> productDetails.name = " + result.mobileName + "</span>");
-      $("#resultDiv").append("<span class='errorText'> productDetails.price = " + result.mobilePrice + "</span>");
-    }
-    else if (productDetails.siteName === "Flipkart") {
-      $("#resultDiv").append("<span class='errorText'> productDetails.id = " + result.mobileId + "</span>");
-      $("#resultDiv").append("<span class='errorText'> productDetails.name = " + result.mobileName + "</span>");
-      $("#resultDiv").append("<span class='errorText'> productDetails.price = " + result.mobilePrice + "</span>");
-    }
+    getPriceHistoryById(productDetails, afterGettingPriceHistory, afterGettingPriceHistoryError);
+  }
+}
 
-
-    // Update Values if there are any
-
-    if (productDetails.siteName === "Amazon") {
-      if (result.mobileId === productDetails.id) {
-        let data = {};
-        data.siteName = "Amazon";
-        data.id = productDetails.id;
-        let callApi = false;
-        if (productDetails.price && result.mobilePrice != productDetails.price) {
-          data.price = productDetails.price;
-          callApi = true;
-        }
-        if (productDetails.name && result.mobileName != productDetails.name) {
-          data.name = productDetails.name;
-          callApi = true;
-        }
-        if (productDetails.rating && result.mobileRating != productDetails.rating) {
-          data.rating = productDetails.rating;
-          callApi = true;
-        }
-        if (productDetails.reviewCount && result.mobileReviewCount != productDetails.reviewCount) {
-          data.reviewCount = productDetails.reviewCount;
-          callApi = true;
-        }
-        if (productDetails.url && result.mobileUrl != productDetails.url) {
-          data.url = productDetails.url;
-          callApi = true;
-        }
-        if (productDetails.reviewUrl && result.mobileReviewUrl != productDetails.reviewUrl) {
-          data.reviewUrl = productDetails.reviewUrl;
-          callApi = true;
-        }
-        if (productDetails.imageUrl && result.mobileImageUrl != productDetails.imageUrl) {
-          data.imageUrl = productDetails.imageUrl;
-          callApi = true;
-        }
-        if (callApi == true && productDetails.isMobile) {
-          updateProductInfo(data);
-        }
-        else if (!productDetails.isMobile) {
-          console.log("This is not Mobile");
-        }
-        else {
-          console.log("No Updates");
-        }
-      }
-    }
-    else if (productDetails.siteName === "Flipkart") {
-      if (result.mobileId === productDetails.id) {
-        let data = {};
-        data.siteName = "Flipkart";
-        data.id = productDetails.id;
-        let callApi = false;
-        if (productDetails.price && result.mobilePrice != productDetails.price) {
-          data.price = productDetails.price;
-          callApi = true;
-        }
-        if (productDetails.name && result.mobileName != productDetails.name) {
-          data.name = productDetails.name;
-          callApi = true;
-        }
-        if (productDetails.rating && result.mobileRating != productDetails.rating) {
-          data.rating = productDetails.rating;
-          callApi = true;
-        }
-        if (productDetails.reviewCount && result.mobileReviewCount != productDetails.reviewCount) {
-          data.reviewCount = productDetails.reviewCount;
-          callApi = true;
-        }
-        if (productDetails.url && result.mobileUrl != productDetails.url) {
-          data.url = productDetails.url;
-          callApi = true;
-        }
-        if (productDetails.reviewUrl && result.mobileReviewUrl != productDetails.reviewUrl) {
-          data.reviewUrl = productDetails.reviewUrl;
-          callApi = true;
-        }
-        if (productDetails.imageUrl && result.mobileImageUrl != productDetails.imageUrl) {
-          data.imageUrl = productDetails.imageUrl;
-          callApi = true;
-        }
-        if (callApi == true && productDetails.isMobile) {
-          updateProductInfo(data);
-        }
-        else if (!productDetails.isMobile) {
-          console.log("This is not Mobile");
-        }
-        else {
-          console.log("No Updates");
-        }
-      }
+function afterGettingPriceHistory(data) {
+  if (data) {
+    if ($.type(data) === "array") {
+      data.forEach((item, index) => {
+        $('#priceHistoryTable tr:last').after('<tr><td>'+ item.productPrice +'</td><td>'+ item.updatedDate +'</td></tr>');
+        // demoP.innerHTML = demoP.innerHTML + "index[" + index + "]: " + item + "<br>";
+      });
     }
   }
+
+}
+function afterGettingPriceHistoryError(data) {
+
 }
 
 onCallSucess = () => {
