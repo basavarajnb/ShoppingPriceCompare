@@ -28,11 +28,26 @@ function amazonSource(data, tabId, setAmazonValuesCallback, disableExtension) {
 
         productReviewCount = $(data).find("span#acrCustomerReviewText").text().trim();
         productReviewUrl = $(data).find("a#acrCustomerReviewLink").attr('href');
-        productImageUrl = $(data).find("div#imgTagWrapperId").children('img').attr('src');
+        productImageUrl = $(data).find("").children('img').attr('src');
         if (!productImageUrl) {
             productImageUrl = $(data).find("div.imgTagWrapper > img.a-dynamic-image").attr('src');
         }
         isMobile = true;
+
+
+        
+    productDetailsSelector.id = "";
+    productDetailsSelector.name = "#productTitle";
+    productDetailsSelector.productSalePriceS = "#priceblock_saleprice";
+    productDetailsSelector.productPriceS = "#priceblock_ourprice";
+    productDetailsSelector.productDealPriceS = "#priceblock_dealprice";
+    productDetailsSelector.rating = "span#acrPopover";
+    productDetailsSelector.reviewCount = "span#acrCustomerReviewText";
+    productDetailsSelector.reviewUrl = "a#acrCustomerReviewLink";
+    productDetailsSelector.imageUrl = "div#imgTagWrapperId > img";
+    productDetailsSelector.imageUrl2 = "div.imgTagWrapper > img.a-dynamic-image";
+
+    imageUrl = $("div._2SIJjY > img")["src"];
 
 
 

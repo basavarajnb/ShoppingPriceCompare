@@ -53,6 +53,36 @@ function updateProductInfo(data) {
     });
 }
 
+function getSelectorObject(url) {
+    let productDetailsSelector = {};
+    let originUrl = url.match(/^[\w-]+:\/{2,}\[?[\w\.:-]+\]?(?::[0-9]*)?/)[0];
+    if (originUrl.indexOf("amazon") !== -1) {
+        productDetailsSelector.siteName = "Amazon";
+        productDetailsSelector.id = "";
+        productDetailsSelector.name = "#productTitle";
+        productDetailsSelector.productSalePriceS = "#priceblock_saleprice";
+        productDetailsSelector.productPriceS = "#priceblock_ourprice";
+        productDetailsSelector.productDealPriceS = "#priceblock_dealprice";
+        productDetailsSelector.rating = "span#acrPopover";
+        productDetailsSelector.reviewCount = "span#acrCustomerReviewText";
+        productDetailsSelector.reviewUrl = "a#acrCustomerReviewLink";
+        productDetailsSelector.imageUrl = "div#imgTagWrapperId > img";
+        productDetailsSelector.imageUrl2 = "div.imgTagWrapper > img.a-dynamic-image";
+    }
+    else if (originUrl.indexOf("flipkart") !== -1) {
+        productDetailsSelector.siteName = "Flipkart";
+        productDetailsSelector.id = "";
+        productDetailsSelector.name = "._3eAQiD";
+        productDetailsSelector.formattedPrice = "._1vC4OE._37U4_g"; // '\u20B9 '
+        // productDetailsSelector.price = "";
+        productDetailsSelector.rating = "._1dlNCg > div > span > div > span";
+        productDetailsSelector.reviewCount = "._1dlNCg > div > span._38sUEc >span";
+        productDetailsSelector.reviewUrl = "";
+        productDetailsSelector.imageUrl = "div._2SIJjY > img";
+    }
+    return productDetailsSelector;
+}
+
 function addNewProduct(productDetails) {
     $.ajax({
         url: serviceHostAddress + "add-mobile.php",

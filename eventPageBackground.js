@@ -9,45 +9,14 @@ var originUrls = ["http://www.amazon.in",
     "https://www.flipkart.com"
 ];
 
-// chrome.tabs.onActivated.addListener(function (activeInfo) {
-//     chrome.tabs.get(activeInfo.tabId, function (tab) {
-//         console.log("chrome.tabs.onActivated    ---- SendBodyTagString   ---  Page Status : ", tab.status);
-//         getBodyTagSourceString(tab);
-//     });
-// });
-
-// chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
-//     console.log("ON LOAD  Message", sender.tab);
-//     if (response && response.sourceString) {
-//             afterGettingSource(response.sourceString, sender.tab);
-//         }
-//         else {
-//             console.log("SendBodyTagString returned UNDEFINED");
-//             disableExtension(sender.tab.id)
-//         }
-// });
-
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     if (changeInfo.status == 'complete') {
-        console.log("AFTER UPDATE COMPLETE ---- SendBodyTagString   ---  Page Status : ", tab.status);
-        getBodyTagSourceString(tab);
+        console.log("AFTER UPDATE COMPLETE ---- SendProductDetails   ---  Page Status : ", tab);
+        getProductDetailsFromContentScript(tab);
     }
 });
 
-function getBodyTagSourceString(tab) {
-    chrome.tabs.sendMessage(tab.id, { action: "SendBodyTagString" }, function (response) {
-        if (response && response.sourceString && tab.status === "complete") {
-            afterGettingSource(response.sourceString, tab);
-        }
-        else {
-            console.log("SendBodyTagString returned UNDEFINED");
-            disableExtension(tab.id)
-        }
-    });
-}
-
-function afterGettingSource(data, tab) {
-    let isShoppingSite = false;
+function getProductDetailsFromContentScript(tab) {
     let originUrl = tab.url.match(/^[\w-]+:\/{2,}\[?[\w\.:-]+\]?(?::[0-9]*)?/)[0];
     originUrls.forEach((value) => {
         if (value.startsWith(originUrl)) {
@@ -55,26 +24,53 @@ function afterGettingSource(data, tab) {
         }
     });
     if (isShoppingSite) {
-        productDetails.domain = originUrl;
-        productDetails.url = tab.url;
-
-        let price = 0;
-        data = data.replace(/<script[^>]+?\/>|<script(.|\s)*?\/script>/gi, '').trim();
-        data = $.parseHTML(data);
-        if (originUrl.indexOf("amazon") !== -1) {
-            productDetails.siteName = "Amazon";
-            amazonSource(data, tab.id, setAmazonValues, disableExtension);
-        }
-        else if (originUrl.indexOf("flipkart") !== -1) {
-            productDetails.siteName = "Flipkart";
-            flipkartSource(data, tab.id, setFlipkartValues, disableExtension);
-            console.log("FLIPKART SITE");
-        }
+        let selectorObj = getSelectorObject(tab.url); // From Shopping Service
+        chrome.tabs.sendMessage(tab.id, { action: "SendProductDetails", selectorObj: selectorObj }, function (response) {
+            if (response && response.productDetails && tab.status === "complete") {
+                afterGettingProductDetailsFromCScript(response.productDetails, tab);
+            }
+            else {
+                console.log("SendBodyTagString returned UNDEFINED");
+                disableExtension(tab.id)
+            }
+        });
     } else {
         disableExtension(tab.id);
     }
 }
 
+function afterGettingProductDetailsFromCScript(data, tab) {
+    if (data.productId && data.productName && data.productFormatterPrice) {
+        productDetails.siteName = data.siteName;
+        productDetails.id = data.productId;
+        productDetails.name = data.productName;
+        productDetails.formattedPrice = data.productFormatterPrice;
+        productDetails.price = Number(data.productFormatterPrice.replace(/[^0-9\.]+/g, ""));;
+        productDetails.rating = data.productRating;
+        productDetails.reviewCount = data.productReviewCount;
+        productDetails.reviewUrl = data.productReviewUrl;
+        productDetails.imageUrl = data.productImageUrl;
+        productDetails.isMobile = true;
+
+        console.log("Product Details => ", productDetails);
+
+        setTabDetails(tab.id);
+
+        getProductDetailsById(productDetails, afterGettingMobileById, afterNoRecordsFound);
+    }
+    else {
+        disableExtension(tab.id);
+    }
+}
+
+function afterNoRecordsFound(result) {
+    if (productDetails.isMobile) {
+        console.log("GET ERROR");
+    }
+    else {
+        console.log("This is not Mobile");
+    }
+}
 
 function afterGettingMobileById(result, isUpdated) {
     if (result) {
@@ -94,15 +90,6 @@ function disableExtension(tabId) {
         tabId: tabId
     });
     badgeTextData[tabId] = { badgeText: "" };
-}
-
-function getParameterByName(name, url) {
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
 function setTabDetails(tabId) {
