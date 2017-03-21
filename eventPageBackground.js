@@ -50,6 +50,7 @@ function afterGettingProductDetailsFromCScript(data, tab) {
         productDetails.reviewCount = data.productReviewCount;
         productDetails.reviewUrl = data.productReviewUrl;
         productDetails.imageUrl = data.productImageUrl;
+        productDetails.url = data.url;
         productDetails.isMobile = true;
 
         console.log("Product Details => ", productDetails);

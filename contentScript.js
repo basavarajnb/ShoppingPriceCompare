@@ -56,14 +56,14 @@ function getProductDetailsFromPage(selectorObj) {
         }
 
         productDetails.productRating = productRating;
-        productDetails.productReviewUrl = $(selectorObj.reviewUrl).attr("href");
-        if (productDetails.reviewUrl) {
-            productDetails.reviewUrl = productDetails.domain + productDetails.reviewUrl;
+        let productReviewUrlPart2 = $(selectorObj.reviewUrl).attr("href");
+        if (productReviewUrlPart2) {
+            productDetails.productReviewUrl = productDetails.domain + productReviewUrlPart2;
         }
         else {
-            productDetails.reviewUrl = productDetails.url
+            productDetails.productReviewUrl = productDetails.url
         }
-        let array1 = productDetails.productReviewUrl.split('/');
+        let array1 = productReviewUrlPart2.split('/');
         productDetails.productId = array1[3];
         productDetails.url = productDetails.domain + "/gp/product/" + productDetails.productId;
     }
