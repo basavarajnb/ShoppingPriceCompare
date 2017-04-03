@@ -108,9 +108,9 @@ function setPopupValues(productDetails, tabId) {
 
 function afterGettingMobileById(result, isUpdated) {
   if (result) {
-    $("#resultDiv").append("<span class='errorText'> productDetails.id = " + result.mobileId + "</span>");
-    $("#resultDiv").append("<span class='errorText'> productDetails.name = " + result.mobileName + "</span>");
-    $("#resultDiv").append("<span class='errorText'> productDetails.price = " + result.mobilePrice + "</span>");
+    $("#resultDiv").append("<span class='errorText'> productDetails.id = " + result.productId + "</span>");
+    $("#resultDiv").append("<span class='errorText'> productDetails.name = " + result.productName + "</span>");
+    $("#resultDiv").append("<span class='errorText'> productDetails.price = " + result.productPrice + "</span>");
     if (isUpdated) {
       console.log("Mobile Info is updated");
     }

@@ -103,38 +103,38 @@ function addNewProduct(productDetails) {
 
 var getProductDetailsByIdOnSuccess = (result, productDetails, successCallback) => {
     if (result && !isEmpty(result)) {
-        if (result.mobileId === productDetails.id) {
+        if (result.productId === productDetails.id) {
             let data = {};
             let isUpdated = false;
             data.siteName = productDetails.siteName;
             data.id = productDetails.id;
             data.price = productDetails.price;
             let callApi = false;
-            if (productDetails.price && result.mobilePrice != productDetails.price) {
+            if (productDetails.price && result.productPrice != productDetails.price) {
                 data.price = productDetails.price;
                 callApi = true;
             }
-            if (productDetails.name && result.mobileName != productDetails.name) {
+            if (productDetails.name && result.productName != productDetails.name) {
                 data.name = productDetails.name;
                 callApi = true;
             }
-            if (productDetails.rating && result.mobileRating != productDetails.rating) {
+            if (productDetails.rating && result.productRating != productDetails.rating) {
                 data.rating = productDetails.rating;
                 callApi = true;
             }
-            if (productDetails.reviewCount && result.mobileReviewCount != productDetails.reviewCount) {
+            if (productDetails.reviewCount && result.productReviewCount != productDetails.reviewCount) {
                 data.reviewCount = productDetails.reviewCount;
                 callApi = true;
             }
-            if (productDetails.url && result.mobileUrl != productDetails.url) {
+            if (productDetails.url && result.productUrl != productDetails.url) {
                 data.url = productDetails.url;
                 callApi = true;
             }
-            if (productDetails.reviewUrl && result.mobileReviewUrl != productDetails.reviewUrl) {
+            if (productDetails.reviewUrl && result.productReviewUrl != productDetails.reviewUrl) {
                 data.reviewUrl = productDetails.reviewUrl;
                 callApi = true;
             }
-            if (productDetails.imageUrl && result.mobileImageUrl != productDetails.imageUrl) {
+            if (productDetails.imageUrl && result.productImageUrl != productDetails.imageUrl) {
                 data.imageUrl = productDetails.imageUrl;
                 callApi = true;
             }
