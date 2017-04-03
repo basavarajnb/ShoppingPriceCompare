@@ -108,6 +108,7 @@ var getProductDetailsByIdOnSuccess = (result, productDetails, successCallback) =
             let isUpdated = false;
             data.siteName = productDetails.siteName;
             data.id = productDetails.id;
+            data.price = productDetails.price;
             let callApi = false;
             if (productDetails.price && result.mobilePrice != productDetails.price) {
                 data.price = productDetails.price;

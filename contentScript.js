@@ -58,7 +58,8 @@ function getProductDetailsFromPage(selectorObj) {
         productDetails.productRating = productRating;
         let productReviewUrlPart2 = $(selectorObj.reviewUrl).attr("href");
         if (productReviewUrlPart2) {
-            productDetails.productReviewUrl = productDetails.domain + productReviewUrlPart2;
+            
+            productDetails.productReviewUrl = productDetails.domain?  productDetails.domain + productReviewUrlPart2: productReviewUrlPart2;
         }
         else {
             productDetails.productReviewUrl = productDetails.url
