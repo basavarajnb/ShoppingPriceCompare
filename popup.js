@@ -23,6 +23,7 @@ function getData(tab) {
 }
 
 function getProductDetailsFromContentScript(tab) {
+  let isShoppingSite = false;
   let originUrl = tab.url.match(/^[\w-]+:\/{2,}\[?[\w\.:-]+\]?(?::[0-9]*)?/)[0];
   originUrls.forEach((value) => {
     if (value.startsWith(originUrl)) {

@@ -80,6 +80,7 @@ function getProductDetailsFromPage(selectorObj) {
 
 chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
     if (msg.action == 'SendProductDetails') {
+        console.log("Recieved message from Background");
         sendResponse({ productDetails: getProductDetailsFromPage(msg.selectorObj) });
     }
 });
@@ -97,6 +98,7 @@ function getParameterByName(name, url) {
 chrome.runtime.onMessage.addListener(function (msg, sender, response) {
     // First, validate the message's structure
     if ((msg.from === 'popup') && (msg.subject === 'GeProductDetailsFromBackground')) {
+        console.log("Recieved message from popup");
         response({ productDetails: getProductDetailsFromPage(msg.selectorObj) });
     }
 });
